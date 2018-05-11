@@ -2,9 +2,17 @@ from Tkinter import *
 from ttk import *
 import socket
 import thread
-
+import enc
+public=''
+private=''
+privatec=''
 class ChatClient(Frame):
-  
+  p=577
+  q=587
+  if public=='' and private=='':
+    public,private=enc.generate_keypair(p,q)
+    print "Public Key: ",public," Private Key: ",private
+    print "COPY ABOVE KEYS AND EDIT chat.py next time"
   def __init__(self, root):
     Frame.__init__(self, root)
     self.root = root
@@ -20,7 +28,7 @@ class ChatClient(Frame):
     ScreenSizeX = self.root.winfo_screenwidth()
     ScreenSizeY = self.root.winfo_screenheight()
     self.FrameSizeX  = 800
-    self.FrameSizeY  = 600
+    self.FrameSizeY  = 650
     FramePosX   = (ScreenSizeX - self.FrameSizeX)/2
     FramePosY   = (ScreenSizeY - self.FrameSizeY)/2
     self.root.geometry("%sx%s+%s+%s" % (self.FrameSizeX,self.FrameSizeY,FramePosX,FramePosY))
@@ -76,7 +84,7 @@ class ChatClient(Frame):
 
     self.statusLabel = Label(parentFrame)
 
-    bottomLabel = Label(parentFrame, text="")
+    bottomLabel = Label(parentFrame, text="YO MAMA")
     
     ipGroup.grid(row=0, column=0)
     readChatGroup.grid(row=1, column=0)
@@ -131,6 +139,7 @@ class ChatClient(Frame):
         data = clientsoc.recv(self.buffsize)
         if not data:
             break
+        #data=enc.dec(privatec,data)
         self.addChat("%s:%s" % clientaddr, data)
       except:
           break
@@ -145,6 +154,7 @@ class ChatClient(Frame):
     msg = self.chatVar.get()
     if msg == '':
         return
+    #msg=enc.enc(msg,public)
     self.addChat("me", msg)
     for client in self.allClients.keys():
       client.send(msg)
@@ -169,7 +179,7 @@ class ChatClient(Frame):
     self.statusLabel.config(text=msg)
     print msg
       
-def main():  
+def main():
   root = Tk()
   app = ChatClient(root)
   root.mainloop()  
