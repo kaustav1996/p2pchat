@@ -171,7 +171,6 @@ class ChatClient(Frame):
       
 def main():  
   root = Tk()
-  root.iconbitmap('chat.ico')
   app = ChatClient(root)
   root.mainloop()  
 
